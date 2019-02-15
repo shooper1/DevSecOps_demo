@@ -57,6 +57,9 @@ apply from: "$rootDir/gradle/bdd_test.gradle"
 // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
 apply plugin: 'org.owasp.dependencycheck'
 
+// findbugs will look for security vulnerabilities in the source (SAST)
+apply plugin: 'findbugs'
+
 
 repositories {
     jcenter()
@@ -111,6 +114,10 @@ dependencies {
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:5.2.4"
 
+    //Dependencies for FindBugs and FindBugs plugins
+    findbugs 'com.google.code.findbugs:findbugs:3.0.1'
+    findbugs configurations.findbugsPlugins.dependencies
+    findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
 }
 
 task copyToLib(type: Copy) {
@@ -241,6 +248,26 @@ test {
         exceptionFormat "full" // default is "short"
         // uncomment the following to see the unit test progress in the output
         //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
+//FindBugs task that load security rules only
+task findSecurityBugs(type: FindBugs) {
+
+    classes = fileTree(project.rootDir.absolutePath).include("**/*.class");
+    source = fileTree(project.rootDir.absolutePath).include("**/*.java");
+    classpath = files()
+    pluginClasspath = project.configurations.findbugsPlugins
+
+    findbugs {
+        toolVersion = "3.0.1"
+        sourceSets = [sourceSets.main] // [sourceSets.main] for Java project
+        ignoreFailures = true
+        reportsDir = file("$project.buildDir/findbugsReports")
+        effort = "max"
+        reportLevel = "low"
+        includeFilter = file("$rootProject.projectDir/fsb-include.xml")
+        excludeFilter = file("$rootProject.projectDir/fsb-exclude.xml")
     }
 }
 
