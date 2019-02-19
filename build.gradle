@@ -37,6 +37,9 @@ plugins {
     // simply being run during the test.  It does this by
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
+
+    // Provides Static Code Analysis with SpotBugs
+    id "com.github.spotbugs" version "1.6.10"
 }
 
 // sets the version of Java we want to use - 8
@@ -59,6 +62,9 @@ apply plugin: 'org.owasp.dependencycheck'
 
 // findbugs will look for security vulnerabilities in the source (SAST)
 apply plugin: 'findbugs'
+
+// Checkstyle will run static analysis on source code
+apply plugin: 'checkstyle'
 
 
 repositories {
@@ -115,9 +121,11 @@ dependencies {
     compile "org.flywaydb:flyway-core:5.2.4"
 
     //Dependencies for FindBugs and FindBugs plugins
-    findbugs 'com.google.code.findbugs:findbugs:3.0.1'
-    findbugs configurations.findbugsPlugins.dependencies
-    findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
+    //findbugs 'com.google.code.findbugs:findbugs:3.0.1'
+    //findbugs configurations.findbugsPlugins.dependencies
+    //findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
+    // SpotBugs
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
 }
 
 task copyToLib(type: Copy) {
@@ -269,6 +277,10 @@ task findSecurityBugs(type: FindBugs) {
         //includeFilter = file("$rootProject.projectDir/fsb-include.xml")
         //excludeFilter = file("$rootProject.projectDir/fsb-exclude.xml")
     }
+}
+
+spotbugs {
+    toolVersion = '3.1.11'
 }
 
 dependencyCheck {
