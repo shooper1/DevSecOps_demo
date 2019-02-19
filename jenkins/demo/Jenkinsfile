@@ -26,7 +26,6 @@ pipeline {
       steps {
         sh './gradlew findSecurityBugs'
       }
-<<<<<<< HEAD
       post {
         always {
           // findbugs results
@@ -35,8 +34,6 @@ pipeline {
          //findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/spotbugsXml.xml', unHealthy: ''
         }
       }
-=======
->>>>>>> 9b20c15d9ed05d1186bd6fcb5965c1af66df8da5
     }
 
     stage('Analyze security of dependencies') {
