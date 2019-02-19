@@ -4,6 +4,8 @@ buildscript {
     }
     dependencies {
         classpath 'org.owasp:dependency-check-gradle:4.0.2'
+	    // Add SpotBugs plugin
+	    //classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.10"
     }
 }
 
@@ -38,7 +40,7 @@ plugins {
     // changing the code and seeing if the test fails as a result.
     id 'info.solidsoft.pitest' version '1.4.0'
 
-    // Provides Static Code Analysis with SpotBugs
+    // spotbugs for static code analysis
     id "com.github.spotbugs" version "1.6.10"
 }
 
@@ -63,8 +65,8 @@ apply plugin: 'org.owasp.dependencycheck'
 // findbugs will look for security vulnerabilities in the source (SAST)
 apply plugin: 'findbugs'
 
-// Checkstyle will run static analysis on source code
-apply plugin: 'checkstyle'
+// spotbugs will look perform static code analyis
+apply plugin: "com.github.spotbugs"
 
 
 repositories {
@@ -121,9 +123,10 @@ dependencies {
     compile "org.flywaydb:flyway-core:5.2.4"
 
     //Dependencies for FindBugs and FindBugs plugins
-    //findbugs 'com.google.code.findbugs:findbugs:3.0.1'
-    //findbugs configurations.findbugsPlugins.dependencies
-    //findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
+    findbugs 'com.google.code.findbugs:findbugs:3.0.1'
+    findbugs configurations.findbugsPlugins.dependencies
+    findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
+
     // SpotBugs
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
 }
@@ -131,6 +134,14 @@ dependencies {
 task copyToLib(type: Copy) {
     from configurations.localDeps
     into "$buildDir/lib"
+}
+
+spotbugs {
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "low"
+    reportsDir = file("$project.buildDir/spotbugs")
+
 }
 
 pitest {
@@ -279,9 +290,6 @@ task findSecurityBugs(type: FindBugs) {
     }
 }
 
-spotbugs {
-    toolVersion = '3.1.11'
-}
 
 dependencyCheck {
     showSummary=false
