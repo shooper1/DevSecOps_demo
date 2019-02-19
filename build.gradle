@@ -137,11 +137,11 @@ task copyToLib(type: Copy) {
 }
 
 spotbugs {
+    toolVersion = '3.1.11'
     ignoreFailures = true
     effort = "max"
     reportLevel = "low"
     reportsDir = file("$project.buildDir/spotbugs")
-
 }
 
 pitest {
