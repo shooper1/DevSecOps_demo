@@ -29,9 +29,19 @@ pipeline {
       post {
         always {
           // findbugs results
-          //recordIssues enabledForFailure: true, tools: [[pattern: '**/findSecurityBugs.xml', tool: [$class: 'FindBugs']]]
-          recordIssues enabledForFailure: true, tool: spotBugs(pattern: '**/findSecurityBugs.xml')
-         //findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/spotbugsXml.xml', unHealthy: ''
+          recordIssues enabledForFailure: true, tool: findBugs(pattern: '**/findSecurityBugs.xml')
+        }
+      }
+    }
+
+    stage('SpotBugs Analysis') {
+      steps {
+        sh './gradlew spotbugsmain'
+      }
+      post {
+        always {
+          // spotbugs results
+          recordIssues enabledForFailure: true, tool: spotBugs(pattern: 'build/spotbugs/main.xml')
         }
       }
     }
