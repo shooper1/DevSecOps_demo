@@ -125,10 +125,10 @@ dependencies {
     //Dependencies for FindBugs and FindBugs plugins
     findbugs 'com.google.code.findbugs:findbugs:3.0.1'
     findbugs configurations.findbugsPlugins.dependencies
-    findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
+    //findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
 
     // SpotBugs
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    //spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
 }
 
 task copyToLib(type: Copy) {
