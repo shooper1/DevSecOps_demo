@@ -300,8 +300,9 @@ quality {
 dependencyCheck {
     showSummary=false
     autoUpdate=true
+    outputDirectory='build/reports/dependency-check/'
     cveValidForHours=168 // a week.
-    format='XML' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
+    format='ALL' // options are  (HTML, XML, CSV, JSON, VULN, ALL).
     failBuildOnCVSS=8 // see https://www.first.org/cvss/specification-document#5-Qualitative-Severity-Rating-Scale
 }
 
