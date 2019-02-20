@@ -22,29 +22,29 @@ pipeline {
       }
     }
 
-    stage('Static Application Security Testing') {
-      steps {
-        sh './gradlew findSecurityBugs'
-      }
-      post {
-        always {
-          // findbugs results
-          recordIssues enabledForFailure: true, tool: findBugs(pattern: '**/findSecurityBugs.xml')
-        }
-      }
-    }
+    //stage('Static Application Security Testing') {
+    //  steps {
+    //    sh './gradlew findSecurityBugs'
+    //  }
+    //  post {
+    //    always {
+    //      // findbugs results
+    //      recordIssues enabledForFailure: true, tool: findBugs(pattern: '**/findSecurityBugs.xml')
+    //    }
+    //  }
+    //}
 
-    stage('SpotBugs Analysis') {
-      steps {
-        sh './gradlew spotbugsmain'
-      }
-      post {
-        always {
-          // spotbugs results
-          recordIssues enabledForFailure: true, tool: spotBugs(pattern: 'build/spotbugs/main.xml')
-        }
-      }
-    }
+    //stage('SpotBugs Analysis') {
+    //  steps {
+    //    sh './gradlew spotbugsmain'
+    //  }
+    //  post {
+    //    always {
+    //      // spotbugs results
+    //      recordIssues enabledForFailure: true, tool: spotBugs(pattern: 'build/spotbugs/main.xml')
+    //    }
+    //  }
+    //}
 
         stage('Run Quality Tools Analysis') {
       steps {
