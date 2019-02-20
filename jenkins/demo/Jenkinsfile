@@ -60,9 +60,14 @@ pipeline {
       }
     }
 
-    stage('Analyze security of dependencies') {
+    stage('OWASP Dependency Check') {
       steps {
          sh './gradlew dependencyCheckAnalyze'
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'build/reports/dependency-check/dependency-check-report.xml'
+        }
       }
     }
 
