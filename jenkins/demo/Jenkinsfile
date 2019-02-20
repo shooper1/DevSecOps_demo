@@ -46,6 +46,20 @@ pipeline {
       }
     }
 
+        stage('Run Quality Tools Analysis') {
+      steps {
+        sh './gradlew checkQualityMain'
+      }
+      post {
+        always {
+          // Quality tool results files
+          recordIssues enabledForFailure: true, tool: spotBugs(pattern: 'build/reports/spotbugs/main.xml')
+          recordIssues enabledForFailure: true, tool: pmdParser(pattern: 'build/reports/pmd/main.xml')
+          recordIssues enabledForFailure: true, tool: checkStyle(pattern: 'build/reports/checkstyle/main.xml')
+        }
+      }
+    }
+
     stage('Analyze security of dependencies') {
       steps {
          sh './gradlew dependencyCheckAnalyze'

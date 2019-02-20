@@ -4,8 +4,6 @@ buildscript {
     }
     dependencies {
         classpath 'org.owasp:dependency-check-gradle:4.0.2'
-	    // Add SpotBugs plugin
-	    //classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.10"
     }
 }
 
@@ -139,13 +137,13 @@ task copyToLib(type: Copy) {
     into "$buildDir/lib"
 }
 
-spotbugs {
-    toolVersion = '3.1.11'
-    ignoreFailures = true
-    effort = "max"
-    reportLevel = "low"
-    reportsDir = file("$project.buildDir/spotbugs")
-}
+//spotbugs {
+//    toolVersion = '3.1.11'
+//    ignoreFailures = true
+//    effort = "max"
+//    reportLevel = "low"
+//    reportsDir = file("$project.buildDir/spotbugs")
+//}
 
 pitest {
     targetClasses = ['com.coveros.training.*']  //by default "${project.group}.*"
