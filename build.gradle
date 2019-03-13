@@ -132,7 +132,7 @@ spotbugs {
     effort = "max"
     reportLevel = "low"
     showProgress = "true"
-    reportsDir = file("$project.buildDir/spotbugs")
+    reportsDir = file("${project.buildDir}/spotbugs")
 }
 
 pitest {
