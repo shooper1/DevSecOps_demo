@@ -40,9 +40,6 @@ plugins {
 
     // spotbugs for static code analysis
     id "com.github.spotbugs" version "1.6.10"
-
-    // Quality plugins
-    id 'ru.vyarus.quality' version '3.4.0'
 }
 
 // sets the version of Java we want to use - 8
@@ -63,11 +60,8 @@ apply from: "$rootDir/gradle/bdd_test.gradle"
 // see https://plugins.gradle.org/plugin/org.owasp.dependencycheck
 apply plugin: 'org.owasp.dependencycheck'
 
-// findbugs will look for security vulnerabilities in the source (SAST)
-//apply plugin: 'findbugs'
-
 // spotbugs will look perform static code analyis
-//apply plugin: "com.github.spotbugs"
+apply plugin: "com.github.spotbugs"
 
 
 repositories {
@@ -123,11 +117,6 @@ dependencies {
     // so we can programmatically run flyway at startup
     compile "org.flywaydb:flyway-core:5.2.4"
 
-    //Dependencies for FindBugs and FindBugs plugins
-    //findbugs 'com.google.code.findbugs:findbugs:3.0.1'
-    //findbugs configurations.findbugsPlugins.dependencies
-    //findbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.4.4'
-
     // SpotBugs
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
 }
@@ -137,13 +126,14 @@ task copyToLib(type: Copy) {
     into "$buildDir/lib"
 }
 
-//spotbugs {
-//    toolVersion = '3.1.11'
-//    ignoreFailures = true
-//    effort = "max"
-//    reportLevel = "low"
-//    reportsDir = file("$project.buildDir/spotbugs")
-//}
+spotbugs {
+    toolVersion = '3.1.11'
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "low"
+    showProgress = "true"
+    reportsDir = file("$project.buildDir/spotbugs")
+}
 
 pitest {
     targetClasses = ['com.coveros.training.*']  //by default "${project.group}.*"
@@ -202,11 +192,14 @@ check.dependsOn(jacocoTestReport)
 
 sonarqube {
     properties {
+        property "sonar.projectKey", "spotbugsdemo"
+        property "sonar.projectName", "Demo SpotBugs Application"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java,src/integration_test/java,src/bdd_test/java"
         property "sonar.java.binaries", "build/classes/java/main"
-        property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
-        property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
+        property "sonar.java.spotbugs.reportPaths", "./build/spotbugs/main.xml"
+        //property "sonar.junit.reportPaths", "build/test-results/test/,build/test-results/fastIntegrationTest"
+        //property "sonar.jacoco.reportPaths", "build/jacoco/test.exec,build/jacoco/fastIntegrationTest.exec"
     }
 }
 
@@ -270,32 +263,6 @@ test {
         //events "started", "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
-
-
-quality {
-    strict = false
-}
-
-//FindBugs task that load security rules only
-//task findSecurityBugs(type: FindBugs) {
-
-//    classes = fileTree(project.rootDir.absolutePath).include("**/*.class");
-//    source = fileTree(project.rootDir.absolutePath).include("**/*.java");
-//    classpath = files()
-//    pluginClasspath = project.configurations.findbugsPlugins
-
-//    findbugs {
-//        toolVersion = "3.0.1"
-//        sourceSets = [sourceSets.main] // [sourceSets.main] for Java project
-//        ignoreFailures = true
-//        reportsDir = file("$project.buildDir/findbugsReports")
-//        effort = "max"
-//        reportLevel = "low"
-//        //includeFilter = file("$rootProject.projectDir/fsb-include.xml")
-//        //excludeFilter = file("$rootProject.projectDir/fsb-exclude.xml")
-//    }
-//}
-
 
 dependencyCheck {
     showSummary=false
