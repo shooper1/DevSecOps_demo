@@ -66,7 +66,7 @@ pipeline {
       }
     }
 
-    stage('API Tests') {
+    /*stage('API Tests') {
       steps {
         sh 'ssh cuser@uitestbox "cd demo_tests ; ./gradlew runApiTests"'
         sh 'mkdir build/test-results/api_tests'
@@ -77,7 +77,7 @@ pipeline {
           junit 'build/test-results/api_tests/*.xml'
         }
       }
-    }
+    }*/
 
     // We use a different framework for UI tests, Behave, because Python rules
     // when it comes to experimentation with UI tests.  You can try things and see how they work out.
