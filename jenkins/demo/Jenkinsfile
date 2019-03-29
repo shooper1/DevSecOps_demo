@@ -10,6 +10,11 @@ pipeline {
 
   stages {
 
+    stage ("Prepare") {
+      echo "Prepare build environment"
+      sh './working.sh'
+    }
+
     stage('Build') {
       steps {
         sh './gradlew clean assemble'
