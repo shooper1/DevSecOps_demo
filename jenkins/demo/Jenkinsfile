@@ -10,9 +10,11 @@ pipeline {
 
   stages {
 
-    stage ("Prepare") {
-      echo "Prepare build environment"
-      sh './working.sh'
+    stage('Prepare') {
+      steps {
+        echo "Prepare the build environment"
+        sh './working.sh'
+      }
     }
 
     stage('Build') {
