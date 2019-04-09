@@ -9,14 +9,22 @@ pipeline {
     stage('Unit Test') {
       steps {
         sh './gradlew test'
-        junit 'build/test-results/test/*.xml'
+      }
+      post {
+        always {
+          junit 'build/test-results/test/*.xml'
+        }
       }
     }
     stage('DB Tests') {
       steps {
         sh './gradlew fastIntegrationTest'
-        junit 'build/test-results/fastIntegrationTest/*.xml'
       }
+	post {
+	   always {
+              junit 'build/test-results/fastIntegrationTest/*.xml'
+           }
+        }
     }
     stage('Dependency Scan') {
       parallel {
@@ -44,7 +52,6 @@ pipeline {
       steps {
         echo 'Run post-deployment smoke test'
         sleep 5
-        catchError()
       }
     }
     stage('Functional Test') {
